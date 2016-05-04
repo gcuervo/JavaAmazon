@@ -10,4 +10,4 @@
 
 ###Guide
 
-	Build the war via maven command line( mvn clean install).Deploy the war to a Servlet 3.0 container. Since here i am using Tomcat, i will simply put this war file into tomcat webapps folder and click on start.bat inside tomcat/bin directory.
+ Build the war via maven command line( mvn clean install).Deploy the war to a Servlet 3.0 container. Since here i am using Tomcat, i will simply put this war file into tomcat webapps folder and click on start.bat inside tomcat/bin directory.
