@@ -1,30 +1,28 @@
 package com.websystique.springmvc.controller;
 
 import java.util.List;
-import java.util.Locale;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.websystique.springmvc.model.Employee;
 import com.websystique.springmvc.model.User;
 import com.websystique.springmvc.service.UserService;
+
+import com.websystique.springmvc.model.Article;
+import com.websystique.springmvc.service.ArticleService;
 
 @Controller
 @RequestMapping("/")
 public class AppController {
 
 	@Autowired
-	private UserService service;
+	private UserService user;
+
 	
 	@Autowired
 	private MessageSource messageSource;
@@ -32,14 +30,26 @@ public class AppController {
 	/*
 	 * This method will list all existing employees.
 	 */
-	@RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
-	public String listEmployees(ModelMap model) {
+	@RequestMapping(value = { "/", "/listUsers" }, method = RequestMethod.GET)
+	public String listUsers(ModelMap model) {
 
-		List<User> users = service.listAllUsers();
-		model.addAttribute("users", users);  // mapeo con el jsp para mostrar los usuarios
-		return "allUsers";
+		List<User> users = user.listAllUsers();
+		model.addAttribute("users", users);
+		return "users/allUsers";
 	}
-
+	/*
+	 * This method will delete an employee by it's SSN value.
+	 */
+	@RequestMapping(value = { "/delete-{email}-user" }, method = RequestMethod.GET)
+	public String deleteEmployee(@PathVariable String email) {
+		user.deleteUserByEmail(email);
+		return "redirect:users/listUsers";
+	}
+	/*
+	 * This method will delete an employee by it's SSN value.
+	 *
+	 */
+	
 	/*
 	 * This method will provide the medium to add a new employee.
 	 *
@@ -120,13 +130,5 @@ public class AppController {
 	}
 
 	*/
-	/*
-	 * This method will delete an employee by it's SSN value.
-	 */
-	@RequestMapping(value = { "/delete-{email}-user" }, method = RequestMethod.GET)
-	public String deleteEmployee(@PathVariable String email) {
-		service.deleteUserByEmail(email);
-		return "redirect:/list";
-	}
 
 }

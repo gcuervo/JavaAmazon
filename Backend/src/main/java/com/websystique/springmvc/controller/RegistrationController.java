@@ -24,31 +24,41 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.websystique.springmvc.model.User;
 import com.websystique.springmvc.service.UserService;
 
+import bsh.Console;
+
+import com.websystique.springmvc.model.Article;
+import com.websystique.springmvc.service.ArticleService;
+
 @Controller
 @RequestMapping(value = { "/" })
 public class RegistrationController {
 
 	@Autowired
-	private UserService service;
+	private ArticleService articleService;	
+	
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private MessageSource messageSource;
 
+	
+	/*****************************USERS_START*******************************/
 	/*
 	 * This method will provide the medium to add a new User.
 	 */
-	@RequestMapping(value = { "/registration" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "/registrationUser" }, method = RequestMethod.GET)
 	public String newUser(ModelMap model) {
 		User user = new User();
 		model.addAttribute("user", user);
-		return "registrationUser";
+		return "users/registrationUser";
 	}
 
 	/*
 	 * This method will be called on form submission, handling POST request for
 	 * saving employee in database. It also validates the user input
 	 */
-	@RequestMapping(value = { "/registration" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "/registrationUser" }, method = RequestMethod.POST)
 	public String saveUser(@Valid User user, BindingResult result, ModelMap model) {
 		DateTimeFormatter dateFormat = DateTimeFormat.forPattern("G,C,Y,x,w,e,E,Y,D,M,d,a,K,h,H,k,m,s,S,z,Z");
 
@@ -67,7 +77,7 @@ public class RegistrationController {
 		user.setRating(0);
 
 		if (result.hasErrors()) {
-			return "registrationUser";
+			return "users/registrationUser";
 		}
 
 		/*
@@ -80,16 +90,17 @@ public class RegistrationController {
 		 * still using internationalized messages.
 		 * 
 		 */
-		if (!service.isUserEmailUnique(user.getId(), user.getEmail())) {
+		if (!userService.isUserEmailUnique(user.getId(), user.getEmail())) {
 			FieldError emailError = new FieldError("user", "email", messageSource.getMessage("non.unique.email",
 					new String[] { user.getEmail() }, Locale.getDefault()));
 			result.addError(emailError);
 			return "registrationUser";
 		}
 
-		service.saveUser(user);
+		userService.saveUser(user);
 
 		model.addAttribute("success", "User " + user.getName() + " Registered Successfully");
-		return "success";
+		return "successUser";
 	}
+	/*****************************USERS_END*********************************/
 }
