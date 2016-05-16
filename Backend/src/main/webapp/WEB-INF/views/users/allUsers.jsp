@@ -33,6 +33,6 @@
 		</c:forEach>
 	</table>
 	<br/>
-	<a href="<c:url value='/registration' />">Add New User</a>
+	<a href="<c:url value='/registrationUser' />">Add New User</a>
 </body>
 </html>
